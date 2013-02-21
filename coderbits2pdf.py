@@ -5,7 +5,7 @@ Coderbits2PDF - Convert your coderbits profile to pdf.
 Added option of adding your github repos.
 
 Usage -
-python coderbits2pdf --create username    # create resume
+python coderbits2pdf --make username    # create resume
 python coderbits2pdf --add username       # add user
 python coderbits2pdf --del username       # delete user
 python coderbits2pdf --add-repo username  # add more repositories
@@ -41,9 +41,11 @@ def get_repos(username, selected_repos=None):
     if selected_repos is None:
         return repos
     contents= []
-    for repo in repos:
-        if repo['name'] in selected_repos:
-            contents.append(repo)
+    for repo in selected_repos:
+        if repo in repos:
+            contents.append(repos[repo])
+        else:
+            print 'Warning! Repository {0} not found in github.'.format(repo)
     return contents
 
 def get_chart(data, name, labels, username):
@@ -74,7 +76,31 @@ def create_resume(username):
     if username not in config:
         print 'Error! User does not exist'
         return
-    
+    coderbits= get_coderbits(username)
+    for entry in coderbits:
+        if 'top_' in entry:
+            data= []
+            labels= []
+            for value in coderbits[entry]:
+                data.append(float(value['count']))
+                labels.append(value['name'])
+            total= sum(data)
+            data= map(lambda x: str((x/total)*100), data)
+            labels= ['{0} {1}%'.format(x, y) for x, y in labels, data]
+            get_chart(data, entry, labels, username)
+    args= []
+    args.append(config[username]['github'])
+    args.append(config[username]['repositories'] if len(config[username]['repositories'])>0 else None)
+    github= get_github(*args)
+    try:
+        with open(path.join(dir, 'layout.html'), 'r') as f:
+            layout= f.read()
+    except IOError:
+        print 'Template not found!'
+        return
+    template= Template(layout)
+    html= template.render(user=username, coderbits=coderbits, github=github, base=dir)
+    save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'style.css'))
 
 def add_user(username, github):
     try:
@@ -152,7 +178,17 @@ def add_repos(username):
             print 'Error! Repository already in list.'
 
 def main():
-    pass
+    args= {'--add': add_user,
+        '--del': del_user,
+        '--add-repo': add_repos,
+        '--del-repo': del_repos,
+        '--make': create_resume
+        }
+    if argv[1] not in args or len(argv)!=3:
+        print 'Invalid arguments!'
+        print __doc__
+        return
+    args[argv[1]](argv[2])
 
 if __name__=='__main__':
     main()
