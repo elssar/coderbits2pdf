@@ -5,7 +5,11 @@ Coderbits2PDF - Convert your coderbits profile to pdf.
 Added option of adding your github repos.
 
 Usage -
-
+python coderbits2pdf --create username    # create resume
+python coderbits2pdf --add username       # add user
+python coderbits2pdf --del username       # delete user
+python coderbits2pdf --add-repo username  # add more repositories
+python coderbits2pdf --del-repo username  # delete repositories
 """
 
 __author__= 'elssar <elssar@altrawcode.com>'
@@ -42,7 +46,7 @@ def get_repos(username, selected_repos=None):
             contents.append(repo)
     return contents
 
-def get_chart(data, name, labels):
+def get_chart(data, name, labels, username):
     payload= {'cht': 'p3',
             'chs': '250x150',
             'chco': '2F69BF|A2BF2F|BF5A2F|BFA22F|772FBF',
@@ -53,12 +57,24 @@ def get_chart(data, name, labels):
     header['content-type': 'image/png']
     req= post(charts, headers= header, data= payload)
     image= req.content
-    with open(path.join(dir, '{0}.png'.format(name)), 'wb') as f:
+    with open(path.join(dir, '{0}-{1}.png'.format(username, name)), 'wb') as f:
         f.write(image)
 
-def create_resume(html, output, css):
+def save_pdf(html, output, css):
     with open(output, 'wb') as resume:
         CreatePDF(html, resume, default_css=css)
+
+def create_resume(username):
+    try:
+        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+            config= load(con_file)
+    except IOError:
+        print 'Error opening config.yaml'
+        return
+    if username not in config:
+        print 'Error! User does not exist'
+        return
+    
 
 def add_user(username, github):
     try:
@@ -91,11 +107,49 @@ def del_user(username):
     del config[username]
     print 'User {0} deleted.'.format(username)
 
-def del_repos():
-    pass
+def del_repos(username):
+    try:
+        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+            config= load(con_file)
+    except IOError:
+        print 'Config file does not exist.'
+        return
+    if username not in config:
+        print 'User does not exist.'
+        return
+    print 'Which repositories do you want to remove from the list?'
+    print 'Enter the names one per line, and leave line blank when done.'
+    while True:
+        repo= raw_input()
+        if repo=='':
+            break
+        if repo in config[username]['repositories']:
+            config[username]['repositories'].remove(repo)
+            print 'Repository {0} deleted.'.format(repo)
+        else:
+            print 'Error! Repository not in list.'
 
-def add_repos():
-    pass
+def add_repos(username):
+    try:
+        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+            config= load(con_file)
+    except IOError:
+        print 'Config file does not exist.'
+        return
+    if username not in config:
+        print 'User does not exist.'
+        return
+    print 'Which repositories do you want to add to the list?'
+    print 'Enter the names one per line, and leave line blank when done.'
+    while True:
+        repo= raw_input()
+        if repo=='':
+            break
+        if repo not in config[username]['repositories']:
+            config[username]['repositories'].append(repo)
+            print 'Repository {0} added'.format(repo)
+        else:
+            print 'Error! Repository already in list.'
 
 def main():
     pass
