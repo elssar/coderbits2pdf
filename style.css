@@ -1,45 +1,51 @@
 .resume {
     width: 600px;
     height: 100%;
-    
+    margin: 0;
     }
 
 .about {
-    
+    width: 100%;
+    height: auto;
+    margin: 0;
     }
 
 .intro {
-    
+    width: 70%;
+    height: auto;
+    margin: 0;
     }
 
 .links {
-    
+    width: 30%;
+    height: auto;
+    margin: 0;
     }
 
-#link_cell {
-    
+li {
+    list-style-type: none;
+    margin: 0;
     }
 
 .projects {
-    
+    width: 100%;
+    height: auto;
+    margin: 0;
     }
 
-.project {
-    
-    }
-
-#project-name {
-    
-    }
-
-#project-info {
-    
-    }
+#project {
+    width: 100%;
+    height: auto;
+    margin: 0;
 
 .graphs {
-    
+    width: 100%;
+    height: auto;
+    margin: 0;
     }
 
 #graph {
-    
+    width: 300px;
+    height: 150px;
+    margin: 0;
     }

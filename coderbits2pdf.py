@@ -99,16 +99,18 @@ def create_resume(username):
         print 'Template not found!'
         return
     template= Template(layout)
-    html= template.render(user=username, coderbits=coderbits, github=github, base=dir)
+    html= template.render(user=username, coderbits=coderbits, github=github, base=dir, email=config[username]['email'])
     save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'style.css'))
 
-def add_user(username, github):
+def add_user(username):
     try:
         with open(path.join(dir, config.yaml), 'r') as con_file:
             config= load(con_file.read())
     except IOError:
         config= {}
-    config[username]= {'github': github, 'repositories': []}
+    email= raw_input("Enter email: ")
+    github= raw_input("Enter github username: ")
+    config[username]= {'email': email, 'github': github, 'repositories': []}
     print 'Do you want to specify which github repos to get?'
     print 'Enter the repository name, one per line. Enter blank line when done.'
     print 'Or leave blank if you want all github repos to be included.'

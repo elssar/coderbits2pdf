@@ -1,15 +1,44 @@
 <div class="resume">
     <div class="about">
         <div class="intro">
+            <h1>{{ username }}</h1>
+            <h3>{{ coderbits['title'] }}</h3>
+            <p>{{ coderbits['bio'] }}</p>
         </div>
         <div class="links">
-            {% for  %}
+            <ul>
+                {% if coderbits['location'] != '' %}
+                    <li>Location: {{ coderbits['location'] }}</li>
+                {% endif %}
+                <li>email: {{email }}</li>
+                {% if coderbits['website'] != '' %}
+                    <li>Website: {{ coderbits['website'] }}</li>
+                {% endif %}
+                <li>Resume online: {{ coderbits['link'] }}</li>
+            </ul>
         </div>
     </div>
     <div class="graphs">
-        
+        {% for entry in coderbits %}
+            {% if 'top_' in entry %}
+                <div id="graph">
+                    <img href="{{ path.join(base, '{0}-{1}.png'.format(username, entry)) }}">
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
     <div class="projects">
-        
+        {% for repo in github %}
+            <div id="project">
+                <h3>{{ repo['name'] }}</h3>
+                <p>{{ repo['description'] }}</p>
+                <ul>
+                    {% if repo['homepage'] != '' %}
+                        <li>Homepage: {{ repo['homepage'] }}</li>
+                    {% endif %}
+                    <li>Code: {{ repo['url'] }}</li>
+                </ul> 
+            </div>
+        {% endfor %}
     </div>
 </div>
