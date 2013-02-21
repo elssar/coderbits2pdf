@@ -11,25 +11,21 @@ Usage -
 __author__= 'elssar <elssar@altrawcode.com>'
 __license__= 'MIT'
 
-from requests import post
+from requests import post, get
 from json import loads
 from xhtml2pdf.pisa import CreatePDF
 from jinja2 import Template
 from os import path
 from sys import argv
+from yaml import safe_load as load
 
 dir= path.dirname(path.abspath(__file__))
-config= {}
+coderbits= 'https://coderbits.com/{}.json'
+github= 'https://api.github.com/users/{}/repos'
+charts= 'https://chart.googleapis.com/'
 
-try:
-    with open(dir+'/config.txt', 'r') as confile:
-        for line in confile:
-            value= line.split()
-            config[value[0]]= value[1]
-except IOError:
-    print "Warning! Configuration could not be loaded"
-    print "Reverting to defaults"
-    config['template']= 'layout.css'
-    config['css']= 'style.css'
-    config['output']= 'resume.pdf'
+def main():
+    pass
 
+if __name__=='__main__':
+    main()
