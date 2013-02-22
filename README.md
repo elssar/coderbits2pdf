@@ -3,6 +3,8 @@ coderbits2pdf
 
 Create a pdf of your [Coderbits](https://coderbits.com) profile, with the option of listing any of your github repos.
 
+Not on coderbits yet? Click [here](https://coderbits.com/account/signup?inviteCode=3a0c4738-12bb-4852-9c90-7bd2c4e2a46d) to join (invite link)
+
 Usage -
 
     python coderbits2pdf --make username      # create resume
