@@ -1,7 +1,7 @@
 <div class="resume">
     <div class="about">
         <div class="intro">
-            <h1>{{ username }}</h1>
+            <h1>{{ coderbits['name'] }}</h1>
             <h3>{{ coderbits['title'] }}</h3>
             <p>{{ coderbits['bio'] }}</p>
         </div>
@@ -11,32 +11,31 @@
                     <li>Location: {{ coderbits['location'] }}</li>
                 {% endif %}
                 <li>email: {{email }}</li>
-                {% if coderbits['website'] != '' %}
-                    <li>Website: {{ coderbits['website'] }}</li>
+                {% if coderbits['website_link'] != '' %}
+                    <li>Website: {{ coderbits['website_link'] }}</li>
                 {% endif %}
                 <li>Resume online: {{ coderbits['link'] }}</li>
             </ul>
         </div>
     </div>
-    <div class="graphs">
-        {% for entry in coderbits %}
-            {% if 'top_' in entry %}
-                <div id="graph">
-                    <img href="{{ path.join(base, '{0}-{1}.png'.format(username, entry)) }}">
-                </div>
-            {% endif %}
+    <div class="charts">
+        {% for url in img_urls %}
+            <div id="chart">
+                <img src="{{ url }}" />
+            </div>
         {% endfor %}
     </div>
     <div class="projects">
+        <h2>Projects</h2>
         {% for repo in github %}
             <div id="project">
                 <h3>{{ repo['name'] }}</h3>
                 <p>{{ repo['description'] }}</p>
                 <ul>
-                    {% if repo['homepage'] != '' %}
+                    {% if repo['homepage'] != '' or repo['homepage']!= None %}
                         <li>Homepage: {{ repo['homepage'] }}</li>
                     {% endif %}
-                    <li>Code: {{ repo['url'] }}</li>
+                    <li>Code: {{ repo['html_url'] }}</li>
                 </ul> 
             </div>
         {% endfor %}

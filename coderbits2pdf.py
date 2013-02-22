@@ -17,7 +17,7 @@ __license__= 'MIT'
 
 from requests import post, get
 from json import loads
-from xhtml2pdf.pisa import CreatePDF
+from weasyprint import HTML, CSS
 from jinja2 import Template
 from os import path
 from sys import argv
@@ -26,12 +26,12 @@ from yaml import dump, safe_load as load
 dir= path.dirname(path.abspath(__file__))
 coderbits= 'https://coderbits.com/{0}.json'
 github= 'https://api.github.com/users/{0}/repos'
-charts= 'https://chart.googleapis.com/'
+charts= 'http://{0}.chart.apis.google.com/chart?'
 header= {'user-agent': 'coderbits2pdf'}
 
 def get_coderbits(username):
-    profile= get(coderbits.format(username), headers= header)
-    if profile.status_code!=200 or len(profile.headers['content'])==2:
+    profile= get(coderbits.format(username))
+    if profile.status_code!=200 or profile.headers['content-length']=='2':
         return None
     return loads(profile.content)
 
@@ -48,23 +48,21 @@ def get_repos(username, selected_repos=None):
             print 'Warning! Repository {0} not found in github.'.format(repo)
     return contents
 
-def get_chart(data, name, labels, username):
+def get_chart_url(data, name, labels):
     payload= {'cht': 'p3',
-            'chs': '250x150',
+            'chs': '300x150',
             'chco': '2F69BF|A2BF2F|BF5A2F|BFA22F|772FBF',
             'chtt': name,
             'chd': 't:'+','.join(data),
             'chdl': '|'.join(labels)
             }
-    header['content-type': 'image/png']
-    req= post(charts, headers= header, data= payload)
-    image= req.content
-    with open(path.join(dir, '{0}-{1}.png'.format(username, name)), 'wb') as f:
-        f.write(image)
+    query_string= ''
+    for key in payload:
+        query_string+= '{0}={1}&'.format(key, payload[key])
+    return query_string[:-1]
 
 def save_pdf(html, output, css):
-    with open(output, 'wb') as resume:
-        CreatePDF(html, resume, default_css=css)
+    HTML(string=html).write_pdf(output, stylesheets=[CSS(css), CSS(string= '@page { size: A4; margin: 2cm}')])
 
 def create_resume(username):
     try:
@@ -77,6 +75,8 @@ def create_resume(username):
         print 'Error! User does not exist'
         return
     coderbits= get_coderbits(username)
+    img_urls= []
+    i= 0
     for entry in coderbits:
         if 'top_' in entry:
             data= []
@@ -86,12 +86,16 @@ def create_resume(username):
                 labels.append(value['name'])
             total= sum(data)
             data= map(lambda x: str((x/total)*100), data)
-            labels= ['{0} {1}%'.format(x, y) for x, y in labels, data]
-            get_chart(data, entry, labels, username)
+            labels= ['{0} {1}%'.format(x, y[:y.find('.')+3]) for x, y in zip(labels, data)]
+            title= entry.replace('_', ' ')
+            title= title.title()
+            query_string= get_chart_url(data, title, labels)
+            img_urls.append(charts.format(i)+query_string)
+            i+= 1
     args= []
     args.append(config[username]['github'])
     args.append(config[username]['repositories'] if len(config[username]['repositories'])>0 else None)
-    github= get_github(*args)
+    github= get_repos(*args)
     try:
         with open(path.join(dir, 'layout.html'), 'r') as f:
             layout= f.read()
@@ -99,12 +103,14 @@ def create_resume(username):
         print 'Template not found!'
         return
     template= Template(layout)
-    html= template.render(user=username, coderbits=coderbits, github=github, base=dir, email=config[username]['email'])
+    html= template.render(username=username, coderbits=coderbits, github=github, img_urls=img_urls, email=config[username]['email'])
+    with open(path.join(dir, 'resume.html'), 'w') as res:
+        res.write(html)
     save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'style.css'))
 
 def add_user(username):
     try:
-        with open(path.join(dir, config.yaml), 'r') as con_file:
+        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
             config= load(con_file.read())
     except IOError:
         config= {}

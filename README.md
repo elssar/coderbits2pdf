@@ -15,5 +15,5 @@ Requires -
 
  - [requests](http://docs.python-requests.org/en/latest/index.html)
  - [PyYaml](http://pyyaml.org/)
- - [xhtml2pdf](http://www.xhtml2pdf.com/)
+ - [WeasyPrint](http://weasyprint.org/)
  - [jinja2](http://jinja.pocoo.org)
