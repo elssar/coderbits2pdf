@@ -5,7 +5,7 @@ Coderbits2PDF - Convert your coderbits profile to pdf.
 Added option of adding your github repos.
 
 Usage -
-python coderbits2pdf --make username    # create resume
+python coderbits2pdf --make username      # create resume
 python coderbits2pdf --add username       # add user
 python coderbits2pdf --del username       # delete user
 python coderbits2pdf --add-repo username  # add more repositories
@@ -22,6 +22,10 @@ from jinja2 import Template
 from os import path
 from sys import argv
 from yaml import dump, safe_load as load
+from logging import getLogger
+
+logger= getLogger('weasyprint')
+logger.handlers= []                # Shut up weesyprints noisy logger
 
 dir= path.dirname(path.abspath(__file__))
 coderbits= 'https://coderbits.com/{0}.json'
@@ -62,7 +66,7 @@ def get_chart_url(data, name, labels):
     return query_string[:-1]
 
 def save_pdf(html, output, css):
-    HTML(string=html).write_pdf(output, stylesheets=[CSS(css), CSS(string= '@page { size: A4; margin: 2cm}')])
+    HTML(string=html).write_pdf(output, stylesheets=[CSS(css)])
 
 def create_resume(username):
     try:
@@ -104,9 +108,7 @@ def create_resume(username):
         return
     template= Template(layout)
     html= template.render(username=username, coderbits=coderbits, github=github, img_urls=img_urls, email=config[username]['email'])
-    with open(path.join(dir, 'resume.html'), 'w') as res:
-        res.write(html)
-    save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'style.css'))
+    save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'bootstrap.css'))
 
 def add_user(username):
     try:

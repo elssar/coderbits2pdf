@@ -17,6 +17,10 @@ To do -
 
  1. Improve design - better css and layout
  2. Create demo site.
+ 
+Known issues -
+
+ 1. A repository might get cutoff in the pdf if it's at the bottom of the page. This is due to weesyprint's quirk that it can't page break
 
 Requires -
 
@@ -24,3 +28,7 @@ Requires -
  - [PyYaml](http://pyyaml.org/)
  - [WeasyPrint](http://weasyprint.org/)
  - [jinja2](http://jinja.pocoo.org)
+ 
+Hattip -
+
+ - [Bootstrap](http://twitter.github.com/bootstrap)
