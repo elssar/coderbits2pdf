@@ -5,11 +5,16 @@ Create a pdf of your [Coderbits](https://coderbits.com) profile, with the option
 
 Usage -
 
-    python coderbits2pdf --make username    # create resume
+    python coderbits2pdf --make username      # create resume
     python coderbits2pdf --add username       # add user
     python coderbits2pdf --del username       # delete user
     python coderbits2pdf --add-repo username  # add more repositories
     python coderbits2pdf --del-repo username  # delete repositories
+    
+To do -
+
+ 1. Improve design - better css and layout
+ 2. Create demo site.
 
 Requires -
 
