@@ -27,7 +27,7 @@ from logging import getLogger
 logger= getLogger('weasyprint')
 logger.handlers= []                # Shut up weesyprints noisy logger
 
-dir= path.dirname(path.abspath(__file__))
+base= path.dirname(path.abspath(__file__))
 coderbits= 'https://coderbits.com/{0}.json'
 github= 'https://api.github.com/users/{0}/repos'
 charts= 'http://{0}.chart.apis.google.com/chart?'
@@ -37,6 +37,7 @@ def get_coderbits(username):
     profile= get(coderbits.format(username))
     if profile.status_code!=200 or profile.headers['content-length']=='2':
         return None
+    print 'fetched coderbits profile'
     return loads(profile.content)
 
 def get_repos(username, selected_repos=None):
@@ -50,6 +51,7 @@ def get_repos(username, selected_repos=None):
             contents.append(repos[repo])
         else:
             print 'Warning! Repository {0} not found in github.'.format(repo)
+    print 'fetched github repositories'
     return contents
 
 def get_chart_url(data, name, labels):
@@ -70,7 +72,7 @@ def save_pdf(html, output, css):
 
 def create_resume(username):
     try:
-        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+        with open(path.join(base, 'config.yaml'), 'r') as con_file:
             config= load(con_file)
     except IOError:
         print 'Error opening config.yaml'
@@ -101,18 +103,20 @@ def create_resume(username):
     args.append(config[username]['repositories'] if len(config[username]['repositories'])>0 else None)
     github= get_repos(*args)
     try:
-        with open(path.join(dir, 'layout.html'), 'r') as f:
+        with open(path.join(base, 'layout.html'), 'r') as f:
             layout= f.read()
     except IOError:
         print 'Template not found!'
         return
     template= Template(layout)
     html= template.render(username=username, coderbits=coderbits, github=github, img_urls=img_urls, email=config[username]['email'])
-    save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'resume.css'))
+    print 'creating pdf'
+    save_pdf(html, path.join(base, 'resume.pdf'), path.join(base, 'resume.css'))
+    print 'pdf created'
 
 def add_user(username):
     try:
-        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+        with open(path.join(base, 'config.yaml'), 'r') as con_file:
             config= load(con_file.read())
     except IOError:
         config= {}
@@ -127,12 +131,12 @@ def add_user(username):
         if repo=='':
             break
         config['repositories'].append(repo)
-    with open(path.join(dir, 'config.yaml'), 'w') as con_file:
+    with open(path.join(base, 'config.yaml'), 'w') as con_file:
         dump(config, con_file)
 
 def del_user(username):
     try:
-        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+        with open(path.join(base, 'config.yaml'), 'r') as con_file:
             config= load(con_file.read())
     except IOError:
         print 'No config file.'
@@ -145,7 +149,7 @@ def del_user(username):
 
 def del_repos(username):
     try:
-        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+        with open(path.join(base, 'config.yaml'), 'r') as con_file:
             config= load(con_file)
     except IOError:
         print 'Config file does not exist.'
@@ -167,7 +171,7 @@ def del_repos(username):
 
 def add_repos(username):
     try:
-        with open(path.join(dir, 'config.yaml'), 'r') as con_file:
+        with open(path.join(base, 'config.yaml'), 'r') as con_file:
             config= load(con_file)
     except IOError:
         print 'Config file does not exist.'
