@@ -17,7 +17,11 @@ To do -
 
  1. Improve design - better fonts
  2. Create demo site.
- 
+
+Known issues -
+
+ 1. Charts are of varying sizes
+
 Requires -
 
  - [requests](http://docs.python-requests.org/en/latest/index.html)
