@@ -1,50 +1,57 @@
-<div>
-    <div class="row">
-        <div class="span4">
+<div class="resume">
+    <div class="about">
+        <div class="desc">
             <h1>{{ coderbits['name'] }}</h1>
             <h3>{{ coderbits['title'] }}</h3>
             <p>{{ coderbits['bio'] }}</p>
         </div>
-        <div class="span4">
-            <ul>
+        <div class="contact">
                 {% if coderbits['location'] != '' %}
-                    <li>Location: {{ coderbits['location'] }}</li>
+                    <p>Location: {{ coderbits['location'] }}</p>
                 {% endif %}
-                <li>email: {{email }}</li>
+                <p>email: {{email }}</p>
                 {% if coderbits['website_link'] != '' %}
-                    <li>Website: <a href="{{ coderbits['website_link'] }}">{{ coderbits['website_link'] }}</a></li>
+                    <p>Website: <a href="{{ coderbits['website_link'] }}">{{ coderbits['website_link'] }}</a></p>
                 {% endif %}
-                <li>Resume online: <a href="{{ coderbits['link'] }}">{{ coderbits['link'] }}</a></li>
-            </ul>
+                <p>Resume online: <a href="{{ coderbits['link'] }}">{{ coderbits['link'] }}</a></p>
         </div>
     </div>
-    <div class="row">
-        {% for url in img_urls %}
-            {% if (img_urls.index(url))%2 %}
-                <div class="row">
-            {% endif %}
-            <div class="span4">
-                <img src="{{ url }}" />
+    {% for url in img_urls %}
+        {% if (img_urls.index(url))%4==0 %}
+            <div class="charts">
+        {% endif %}
+        <div class="chart">
+            <img src="{{ url }}" />
+        </div>
+        {% if (img_urls.index(url))%4==3 %}
             </div>
-            {% if (img_urls.index(url))%2 %}
-                </div>
-            {% endif %}
-        {% endfor %}
-    </div>
-    <div class="row">
+        {% endif %}
+    {% endfor %}
+    <div class="projects">
         <h2>Projects</h2>
-    <div>
         {% for repo in github %}
-        <!-- Hack to workaround weasyprint's inability to page break -->
-        <div class="row">  
-            <div class="span5 offset1">
+        <div class="repo">  
+            <div class="repo-info">
                 <h3>{{ repo['name'] }}</h3>
                 <p>{{ repo['description'] }}</p>
-                    {% if repo['homepage'] != '' and repo['homepage']!= None %}
-                        <p>Homepage: <a href="{{ repo['homepage'] }}">{{ repo['homepage'] }}</a></p>
-                    {% endif %}
-                    <p>Code: <a href="{{ repo['html_url'] }}">{{ repo['html_url'] }}</a></p>
+            </div>
+            <div class="repo-stats">
+                <br>
+                {% if repo['homepage'] != '' and repo['homepage']!=None %}
+                    <p>Homepage: <a href="{{ repo['homepage'] }}">{{ repo['homepage'] }}</a></p>
+                {% endif %}
+                <p>Code: <a href="{{ repo['html_url'] }}">{{ repo['html_url'] }}</a></p>
+                {% if repo['language']!=None %}
+                    <p>Language: {{ repo['language'] }}</p>
+                {% endif %}
+                {% if repo['watchers_count']>0 %}
+                    <p>Followers: {{ repo['watchers_count'] }}</p>
+                {% endif %}
+                {% if repo['forks_count']>0 %}
+                    <p>Forks: {{ repo['forks_count'] }}</p>
+                {% endif %}
             </div>
         </div>
         {% endfor %}
+    </div>
 </div>

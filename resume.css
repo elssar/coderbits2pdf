@@ -1,0 +1,67 @@
+.resume {
+    width: 960px;
+    height: auto;
+    margin: 0 auto;
+    }
+
+.about {
+    width: 960px;
+    height: auto;
+    display: table;
+    margin: 0 auto;
+    }
+
+.desc {
+    width: 560px;
+    height: auto;
+    display: table-cell;
+    margin: 0 auto;
+    }
+
+.contact {
+    width: 400px;
+    height: auto;
+    display: table-cell;
+    margin: 0 auto;
+    }
+
+.charts {
+    width: 960px;
+    height: 160px;
+    display: table;
+    margin: 0 auto;
+    }
+
+.chart {
+    width: 220px;
+    height: 150px;
+    display: table-cell;
+    margin: 0 auto;
+    }
+
+.projects {
+    width: 960px;
+    height: 100% auto;
+    margin: 0 auto;
+    }
+
+.repo {
+    width: 900px;
+    height: auto;
+    display: table;
+    margin-left: 30px;
+    }
+
+.repo-info {
+    width: 550px;
+    height: auto;
+    display: table-cell;
+    margin: 0 auto;
+    }
+
+.repo-stats {
+    width: 340px;
+    height: auto;
+    display: table-cell;
+    margin-left: 10px;
+    }

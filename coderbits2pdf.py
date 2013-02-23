@@ -23,6 +23,7 @@ from os import path
 from sys import argv
 from yaml import dump, safe_load as load
 from logging import getLogger
+from xhtml2pdf.pisa import CreatePDF
 
 logger= getLogger('weasyprint')
 logger.handlers= []                # Shut up weesyprints noisy logger
@@ -54,7 +55,7 @@ def get_repos(username, selected_repos=None):
 
 def get_chart_url(data, name, labels):
     payload= {'cht': 'p3',
-            'chs': '300x150',
+            'chs': '220x150',
             'chco': '2F69BF|A2BF2F|BF5A2F|BFA22F|772FBF',
             'chtt': name,
             'chd': 't:'+','.join(data),
@@ -66,7 +67,8 @@ def get_chart_url(data, name, labels):
     return query_string[:-1]
 
 def save_pdf(html, output, css):
-    HTML(string=html).write_pdf(output, stylesheets=[CSS(css)])
+    HTML(string=html).write_pdf(output, stylesheets=[CSS(css), CSS(string= '@page { size: A3, margin: 1cm }')], zoom=1)
+    #CreatePDF(html, dest=output, default_css=css)
 
 def create_resume(username):
     try:
@@ -108,7 +110,7 @@ def create_resume(username):
         return
     template= Template(layout)
     html= template.render(username=username, coderbits=coderbits, github=github, img_urls=img_urls, email=config[username]['email'])
-    save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'bootstrap.css'))
+    save_pdf(html, path.join(dir, 'resume.pdf'), path.join(dir, 'style.css'))
 
 def add_user(username):
     try:

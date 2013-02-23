@@ -20,7 +20,7 @@ To do -
  
 Known issues -
 
- 1. A repository might get cutoff in the pdf if it's at the bottom of the page. This is due to weesyprint's quirk that it can't page break
+ 1. CSS styling isn't working with weasyprint.
 
 Requires -
 
@@ -28,7 +28,3 @@ Requires -
  - [PyYaml](http://pyyaml.org/)
  - [WeasyPrint](http://weasyprint.org/)
  - [jinja2](http://jinja.pocoo.org)
- 
-Hattip -
-
- - [Bootstrap](http://twitter.github.com/bootstrap)
