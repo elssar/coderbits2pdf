@@ -15,13 +15,9 @@ Usage -
     
 To do -
 
- 1. Improve design - better css and layout
+ 1. Improve design - better fonts
  2. Create demo site.
  
-Known issues -
-
- 1. CSS styling isn't working with weasyprint.
-
 Requires -
 
  - [requests](http://docs.python-requests.org/en/latest/index.html)
