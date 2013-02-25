@@ -17,10 +17,7 @@ To do -
 
  1. Improve design - better fonts
  2. Create demo site.
-
-Known issues -
-
- 1. Charts are of varying sizes
+ 3. Make it easier to add more info.
 
 Requires -
 

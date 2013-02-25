@@ -7,23 +7,23 @@
         </div>
         <div class="contact">
                 {% if coderbits['location'] != '' %}
-                    <p>Location: {{ coderbits['location'] }}</p>
+                    {{ coderbits['location'] }}<br>
                 {% endif %}
-                <p>email: {{email }}</p>
+                <i>{{email }}</i><br>
                 {% if coderbits['website_link'] != '' %}
-                    <p>Website: <a href="{{ coderbits['website_link'] }}">{{ coderbits['website_link'] }}</a></p>
+                    <i><u>{{ coderbits['website_link'] }}</u></i><br><br>
                 {% endif %}
-                <p>Resume online: <a href="{{ coderbits['link'] }}">{{ coderbits['link'] }}</a></p>
+                Online resume: <i><u>{{ coderbits['link'] }}</u></i>
         </div>
     </div>
     {% for url in img_urls %}
-        {% if (img_urls.index(url))%4==0 %}
+        {% if (img_urls.index(url))%2==0 %}
             <div class="charts">
         {% endif %}
         <div class="chart">
-            <img src="{{ url }}" />
+            <img src="{{ url }}" style="margin: 0 auto;"/>
         </div>
-        {% if (img_urls.index(url))%4==3 %}
+        {% if (img_urls.index(url))%2==1 %}
             </div>
         {% endif %}
     {% endfor %}
@@ -38,17 +38,17 @@
             <div class="repo-stats">
                 <br>
                 {% if repo['homepage'] != '' and repo['homepage']!=None %}
-                    <p>Homepage: <a href="{{ repo['homepage'] }}">{{ repo['homepage'] }}</a></p>
+                    Homepage: <i><u>{{ repo['homepage'] }}</u></i><br>
                 {% endif %}
-                <p>Code: <a href="{{ repo['html_url'] }}">{{ repo['html_url'] }}</a></p>
+                Code: <i><u>{{ repo['html_url'] }}</u></i><br>
                 {% if repo['language']!=None %}
-                    <p>Language: {{ repo['language'] }}</p>
+                    Language: {{ repo['language'] }}<br>
                 {% endif %}
                 {% if repo['watchers_count']>0 %}
-                    <p>Followers: {{ repo['watchers_count'] }}</p>
+                    Followers: {{ repo['watchers_count'] }}<br>
                 {% endif %}
                 {% if repo['forks_count']>0 %}
-                    <p>Forks: {{ repo['forks_count'] }}</p>
+                    Forks: {{ repo['forks_count'] }}<br>
                 {% endif %}
             </div>
         </div>

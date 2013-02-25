@@ -44,19 +44,21 @@ def get_repos(username, selected_repos=None):
     req= get(github.format(username), headers= header)
     repos= loads(req.content)
     if selected_repos is None:
+        print 'fetched github repositories'
         return repos
     contents= []
+    for repo in repos:
+        if repo['name'] in selected_repos:
+            contents.append(repo)
     for repo in selected_repos:
-        if repo in repos:
-            contents.append(repos[repo])
-        else:
+        if repo not in contents:    
             print 'Warning! Repository {0} not found in github.'.format(repo)
     print 'fetched github repositories'
     return contents
 
 def get_chart_url(data, name, labels):
     payload= {'cht': 'p3',
-            'chs': '220x150',
+            'chs': '300x150',
             'chco': '2F69BF|A2BF2F|BF5A2F|BFA22F|772FBF',
             'chtt': name,
             'chd': 't:'+','.join(data),
@@ -69,7 +71,8 @@ def get_chart_url(data, name, labels):
 
 def save_pdf(html, output, css):
     HTML(string=html).write_pdf(output, stylesheets=[CSS(css), CSS(string='@page {width: 960px}')])
-
+    print 'pdf created'
+    
 def create_resume(username):
     try:
         with open(path.join(base, 'config.yaml'), 'r') as con_file:
@@ -93,9 +96,10 @@ def create_resume(username):
             total= sum(data)
             data= map(lambda x: str((x/total)*100), data)
             labels= ['{0} {1}%'.format(x, y[:y.find('.')+3]) for x, y in zip(labels, data)]
-            title= entry.replace('_', ' ')
-            title= title.title()
-            query_string= get_chart_url(data, title, labels)
+            normalized_labels= [label+' '*(23-len(label)) for label in labels]  #to keep charts the same size
+            heading= entry.replace('_', ' ')
+            heading= heading.title()
+            query_string= get_chart_url(data, heading, normalized_labels)
             img_urls.append(charts.format(i)+query_string)
             i+= 1
     args= []
@@ -112,7 +116,6 @@ def create_resume(username):
     html= template.render(username=username, coderbits=coderbits, github=github, img_urls=img_urls, email=config[username]['email'])
     print 'creating pdf'
     save_pdf(html, path.join(base, 'resume.pdf'), path.join(base, 'resume.css'))
-    print 'pdf created'
 
 def add_user(username):
     try:
