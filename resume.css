@@ -1,3 +1,8 @@
+/* 
+   display: table; and display: table-cell; have been used becuase using floats
+            position elements creates problems with weasyprint(the html to pdf converter)
+*/
+
 .resume {
     width: 960px;
     height: auto;
