@@ -50,8 +50,9 @@ def get_repos(username, selected_repos=None):
     for repo in repos:
         if repo['name'] in selected_repos:
             contents.append(repo)
-    for repo in selected_repos:
-        if repo not in contents:    
+            selected_repos.remove(repo['name'])
+    if selected_repos:
+        for repo in selected_repos:
             print 'Warning! Repository {0} not found in github.'.format(repo)
     print 'fetched github repositories'
     return contents
