@@ -1,12 +1,13 @@
 /* 
    display: table; and display: table-cell; have been used becuase using floats
-            position elements creates problems with weasyprint(the html to pdf converter)
+   position elements creates problems with weasyprint(the html to pdf converter)
 */
 
 .resume {
     width: 960px;
     height: auto;
     margin: 0 auto;
+    font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
     }
 
 .about {
@@ -15,7 +16,7 @@
     display: table;
     margin: 0 auto;
     }
-
+    
 .desc {
     width: 560px;
     height: auto;
