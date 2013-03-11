@@ -5,11 +5,11 @@ Coderbits2PDF - Convert your coderbits profile to pdf.
 Added option of adding your github repos.
 
 Usage -
-python coderbits2pdf --make username      # create resume
-python coderbits2pdf --add username       # add user
-python coderbits2pdf --del username       # delete user
-python coderbits2pdf --add-repo username  # add more repositories
-python coderbits2pdf --del-repo username  # delete repositories
+python coderbits2pdf.py --make username      # create resume
+python coderbits2pdf.py --add username       # add user
+python coderbits2pdf.py --del username       # delete user
+python coderbits2pdf.py --add-repo username  # add more repositories
+python coderbits2pdf.py --del-repo username  # delete repositories
 """
 
 __author__= 'elssar <elssar@altrawcode.com>'
@@ -202,7 +202,7 @@ def main():
         '--del-repo': del_repos,
         '--make': create_resume
         }
-    if argv[1] not in args or len(argv)!=3:
+    if len(argv)!=3 or argv[1] not in args:
         print 'Invalid arguments!'
         print __doc__
         return
